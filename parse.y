@@ -919,7 +919,7 @@ block_identifier_opt /* */
   ;
 
 class_declaration /* IEEE1800-2005: A.1.2 */
-  : K_virtual_opt K_class lifetime_opt identifier_name class_declaration_extends_opt ';'
+  : K_virtual_opt K_class lifetime_opt identifier_name class_declaration_extends_opt module_or_class_parameter_port_list_opt ';'
       { /* Up to 1800-2017 the grammar in the LRM allowed an optional lifetime
 	 * qualifier for class declarations. But the LRM never specified what
 	 * this qualifier should do. Starting with 1800-2023 the qualifier has
@@ -943,7 +943,7 @@ class_declaration /* IEEE1800-2005: A.1.2 */
       }
     class_declaration_endlabel_opt
       { // Wrap up the class.
-	check_end_label(@11, "class", $4, $11);
+	check_end_label(@11, "class", $4, $12);
 	delete[] $4;
       }
   ;
@@ -4730,7 +4730,7 @@ module
       { pform_startmodule(@2, $4, $2==K_program, $2==K_interface, $3, $1);
         port_declaration_context_init(); }
     module_package_import_list_opt
-    module_parameter_port_list_opt
+    module_or_class_parameter_port_list_opt
     module_port_list_opt
     module_attribute_foreign ';'
       { pform_module_set_ports($8); }
@@ -4852,7 +4852,7 @@ module_port_list_opt
   /* Module declarations include optional ANSI style module parameter
      ports. These are simply advance ways to declare parameters, so
      that the port declarations may use them. */
-module_parameter_port_list_opt
+module_or_class_parameter_port_list_opt
   :
   | '#' '('
       { pform_start_parameter_port_list(); }
