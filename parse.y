@@ -4856,7 +4856,7 @@ module_or_class_parameter_port_list_opt
   :
   | '#' '('
       { pform_start_parameter_port_list(); }
-    module_parameter_port_list
+    module_or_class_parameter_port_list
       { pform_end_parameter_port_list(); }
     ')'
   ;
@@ -4872,7 +4872,7 @@ module_parameter
       }
   ;
 
-module_parameter_port_list
+module_or_class_parameter_port_list
   : module_parameter
   | data_type_opt
       { param_data_type = $1;
@@ -4886,8 +4886,8 @@ module_parameter_port_list
   | type_param
       { param_is_local = false; }
     parameter_assign
-  | module_parameter_port_list ',' module_parameter
-  | module_parameter_port_list ',' data_type_opt
+  | module_or_class_parameter_port_list ',' module_parameter
+  | module_or_class_parameter_port_list ',' data_type_opt
       { if ($3) {
 	      pform_requires_sv(@3, "Omitting `parameter`/`localparam` before "
 				    "data type in parameter port list");
@@ -4896,7 +4896,7 @@ module_parameter_port_list
         }
       }
     parameter_assign
-  | module_parameter_port_list ',' type_param parameter_assign
+  | module_or_class_parameter_port_list ',' type_param parameter_assign
   ;
 
 module_item
